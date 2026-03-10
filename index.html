@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BRÛLÉ — Artisan Coffee</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@1,300;1,500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cr:#F5EFE0; --esp:#0C0600; --car:#B8682A; --amb:#D4873A;
+  --gld:#E8A84A; --mut:#7A6A5A; --dk2:#1C0D04; --dk3:#2A1508; --lc:#EDD5A8;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--esp);color:var(--cr);overflow-x:hidden;cursor:none}
+
+/* CURSOR */
+#c1{width:10px;height:10px;border-radius:50%;background:var(--gld);position:fixed;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);mix-blend-mode:exclusion;transition:transform .15s}
+#c2{width:36px;height:36px;border-radius:50%;border:1px solid rgba(232,168,74,.55);position:fixed;pointer-events:none;z-index:9998;transform:translate(-50%,-50%)}
+
+/* NAV */
+nav{position:fixed;top:0;width:100%;z-index:1000;padding:26px 60px;display:flex;align-items:center;justify-content:space-between;transition:all .5s}
+nav.sc{background:rgba(12,6,0,.96);backdrop-filter:blur(20px);padding:15px 60px;border-bottom:1px solid rgba(184,104,42,.2)}
+.logo{font-family:'Playfair Display',serif;font-size:25px;font-weight:900;letter-spacing:8px;color:var(--gld);text-decoration:none}
+.logo b{color:var(--cr);font-weight:900}
+.navl{display:flex;gap:42px;list-style:none}
+.navl a{color:var(--cr);text-decoration:none;font-size:11px;letter-spacing:2.5px;text-transform:uppercase;font-weight:500;opacity:.72;transition:all .3s}
+.navl a:hover{opacity:1;color:var(--gld)}
+.bag-btn{display:flex;align-items:center;gap:9px;background:none;border:1px solid rgba(212,135,58,.4);color:var(--cr);padding:10px 22px;cursor:none;font-family:'DM Sans';font-size:10px;letter-spacing:2px;text-transform:uppercase;font-weight:500;transition:all .3s}
+.bag-btn:hover{border-color:var(--gld);color:var(--gld)}
+.bubble{background:var(--gld);color:var(--esp);width:20px;height:20px;border-radius:50%;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center}
+
+/* HERO */
+.hero{height:100vh;min-height:100vh;display:grid;grid-template-columns:1fr 1fr;position:relative;overflow:hidden}
+.hero-l{display:flex;flex-direction:column;justify-content:center;padding:130px 72px 80px;position:relative;z-index:2}
+.hero-l::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(12,6,0,.85) 50%,transparent);pointer-events:none}
+.hc{position:relative;z-index:1}
+.ey{display:flex;align-items:center;gap:14px;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--gld);margin-bottom:26px;opacity:0;animation:fu .9s .2s forwards}
+.ey-ln{width:34px;height:1px;background:var(--gld)}
+h1.main{font-family:'Playfair Display',serif;font-size:clamp(54px,7.5vw,106px);font-weight:900;line-height:.9;margin-bottom:32px;opacity:0;animation:fu .9s .4s forwards}
+h1.main em{font-style:italic;color:var(--gld);display:block}
+.hero-sub{font-size:15px;line-height:1.85;color:var(--lc);max-width:350px;font-weight:300;margin-bottom:0px;opacity:0;animation:fu .9s .6s forwards}
+.hbtns{display:flex;gap:14px;opacity:0;animation:fu .9s .75s forwards}
+.bf{background:var(--car);color:var(--cr);border:none;padding:16px 36px;cursor:none;font-family:'DM Sans';font-size:11px;letter-spacing:2.5px;text-transform:uppercase;font-weight:600;transition:all .35s}
+.bf:hover{background:var(--gld);transform:translateY(-2px);box-shadow:0 12px 30px rgba(184,104,42,.3)}
+.bo{background:transparent;color:var(--cr);border:1px solid rgba(245,239,224,.25);padding:16px 36px;cursor:none;font-family:'DM Sans';font-size:11px;letter-spacing:2.5px;text-transform:uppercase;font-weight:400;transition:all .3s}
+.bo:hover{border-color:var(--gld);color:var(--gld)}
+.hero-r{position:relative;overflow:hidden}
+.hero-img{position:absolute;inset:0;background-size:cover;background-position:center;background-repeat:no-repeat}
+.hero-img::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(12,6,0,.5) 0%,rgba(12,6,0,.08) 100%)}
+.scroll-hint{position:absolute;bottom:44px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:9px;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--mut);z-index:3;animation:fi 1.2s 1.4s both}
+.scl{width:1px;height:50px;background:linear-gradient(var(--mut),transparent);animation:sa 2.2s ease-in-out infinite}
+@keyframes sa{0%,100%{opacity:.3}50%{opacity:1}}
+
+/* TICKER */
+.ticker{background:var(--car);overflow:hidden;padding:12px 0}
+.tt{display:inline-flex;gap:52px;white-space:nowrap;animation:tick 28s linear infinite}
+.tt span{font-size:10px;letter-spacing:3.5px;text-transform:uppercase;color:var(--esp);font-weight:600}
+.tt .dot{opacity:.4}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* SECTION */
+.sec{padding:120px 60px}
+.sl{display:flex;align-items:center;gap:14px;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--gld);margin-bottom:16px}
+.sl::before{content:'';width:30px;height:1px;background:var(--gld)}
+.st2{font-family:'Playfair Display',serif;font-size:clamp(36px,4.5vw,64px);font-weight:700;line-height:1.06}
+.st2 em{font-style:italic;color:var(--gld)}
+.row-top{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:50px}
+.va{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--mut);text-decoration:none;border-bottom:1px solid var(--mut);padding-bottom:2px;transition:all .3s}
+.va:hover{color:var(--gld);border-color:var(--gld)}
+
+/* FILTER */
+.frow{display:flex;gap:3px;margin-bottom:40px;flex-wrap:wrap}
+.ft{background:none;border:1px solid rgba(245,239,224,.12);color:rgba(245,239,224,.5);padding:9px 20px;cursor:none;font-family:'DM Sans';font-size:10px;letter-spacing:2px;text-transform:uppercase;font-weight:500;transition:all .25s}
+.ft.on,.ft:hover{background:var(--car);border-color:var(--car);color:var(--cr)}
+
+/* PRODUCT GRID */
+.pg{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:3px}
+.pc{background:var(--dk2);overflow:hidden;position:relative;cursor:none;transition:transform .45s cubic-bezier(.16,1,.3,1)}
+.pc:hover{transform:translateY(-6px);z-index:2}
+.pi{height:280px;overflow:hidden;position:relative}
+.pi img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .7s cubic-bezier(.16,1,.3,1)}
+.pc:hover .pi img{transform:scale(1.07)}
+.pbadge{position:absolute;top:16px;left:16px;background:var(--gld);color:var(--esp);font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:5px 11px;font-weight:800;z-index:2}
+.pov{position:absolute;inset:0;background:rgba(12,6,0,.75);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .35s}
+.pc:hover .pov{opacity:1}
+.pq{background:var(--cr);color:var(--esp);border:none;padding:12px 28px;cursor:none;font-family:'DM Sans';font-size:10px;letter-spacing:2.5px;text-transform:uppercase;font-weight:800;transform:translateY(10px);transition:all .35s}
+.pc:hover .pq{transform:translateY(0)}
+.pq:hover{background:var(--gld)}
+.pb{padding:22px 24px}
+.pn{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;margin-bottom:7px}
+.pd{font-size:12px;color:var(--mut);line-height:1.65;margin-bottom:16px}
+.pf{display:flex;justify-content:space-between;align-items:center}
+.ppr{font-size:18px;font-weight:700;color:var(--gld)}
+.ppr s{font-size:12px;color:var(--mut);margin-right:5px;font-weight:400}
+.padd{width:36px;height:36px;border:1px solid rgba(184,104,42,.45);background:none;color:var(--car);cursor:none;font-size:20px;display:flex;align-items:center;justify-content:center;transition:all .25s}
+.padd:hover{background:var(--car);color:var(--cr);border-color:var(--car)}
+
+/* BANNER */
+.banner{height:560px;position:relative;overflow:hidden;display:flex;align-items:center}
+.ban-bg{position:absolute;inset:0;background-size:cover;background-position:center}
+.ban-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(12,6,0,.9) 42%,rgba(12,6,0,.3) 100%)}
+.ban-cnt{position:relative;z-index:1;padding:0 90px;max-width:580px}
+.ban-cnt .st2{font-size:clamp(38px,4.5vw,66px);margin-bottom:22px}
+.ban-cnt p{font-size:15px;color:var(--lc);line-height:1.85;margin-bottom:36px;font-weight:300}
+
+/* CATEGORY */
+.cat-sec{background:var(--dk3);padding:120px 60px}
+.cg{display:grid;grid-template-columns:1.6fr 1fr 1fr;grid-template-rows:270px 270px;gap:3px;margin-top:60px}
+.cc{position:relative;overflow:hidden;cursor:none}
+.cc:nth-child(1){grid-row:1/3}
+.cc-img{position:absolute;inset:0;background-size:cover;background-position:center;transition:transform .7s cubic-bezier(.16,1,.3,1)}
+.cc:hover .cc-img{transform:scale(1.07)}
+.cc-grad{position:absolute;inset:0;background:linear-gradient(to top,rgba(12,6,0,.9) 0%,rgba(12,6,0,.08) 55%)}
+.cc-inf{position:absolute;bottom:24px;left:24px}
+.cc-nm{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;margin-bottom:4px}
+.cc-ct{font-size:10px;letter-spacing:2px;color:var(--gld);text-transform:uppercase}
+
+/* ABOUT */
+.ag{display:grid;grid-template-columns:1fr 1.1fr;gap:80px;align-items:center}
+.av{position:relative}
+.am{width:100%;aspect-ratio:3/4;overflow:hidden}
+.am img{width:100%;height:100%;object-fit:cover;display:block}
+.abox{position:absolute;bottom:-30px;right:-30px;width:160px;height:160px;background:var(--car);display:flex;flex-direction:column;align-items:center;justify-content:center}
+.an{font-family:'Playfair Display',serif;font-size:50px;font-weight:900;line-height:1;color:var(--cr)}
+.al{font-size:10px;letter-spacing:3px;text-transform:uppercase;margin-top:3px}
+.asm{position:absolute;top:48px;left:-52px;width:168px;height:210px;overflow:hidden;border:3px solid var(--dk3)}
+.asm img{width:100%;height:100%;object-fit:cover;display:block}
+.bq{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:28px;line-height:1.55;color:var(--lc);margin:26px 0 28px;padding-left:24px;border-left:2px solid var(--car)}
+.ap{font-size:14px;line-height:1.95;color:var(--mut);font-weight:300;margin-bottom:18px}
+.sr{display:flex;gap:40px;margin-top:40px}
+.sn{font-family:'Playfair Display',serif;font-size:42px;font-weight:900;color:var(--gld);line-height:1}
+.sl2{font-size:10px;letter-spacing:2.5px;color:var(--mut);text-transform:uppercase;margin-top:4px}
+
+/* ORIGINS */
+.ori{background:var(--dk2);padding:120px 60px}
+.og{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;margin-top:60px}
+.oc{position:relative;overflow:hidden;cursor:none}
+.oi{height:400px;overflow:hidden}
+.oi img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .7s}
+.oc:hover .oi img{transform:scale(1.06)}
+.oov{position:absolute;inset:0;background:linear-gradient(to top,rgba(12,6,0,.92) 0%,rgba(12,6,0,.05) 50%)}
+.oinf{position:absolute;bottom:28px;left:28px;right:28px}
+.ofl{font-size:26px;margin-bottom:8px}
+.ocn{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;margin-bottom:5px}
+.onts{font-size:11px;color:var(--gld);letter-spacing:1px;margin-bottom:12px}
+.op{font-size:12px;color:rgba(245,239,224,.55);line-height:1.6}
+
+/* PROCESS */
+.proc{padding:120px 60px}
+.prg{display:grid;grid-template-columns:repeat(4,1fr);gap:3px;margin-top:60px}
+.prc{background:var(--dk2);overflow:hidden}
+.pri{height:220px;overflow:hidden}
+.pri img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s}
+.prc:hover .pri img{transform:scale(1.06)}
+.prb{padding:26px}
+.prn{font-family:'Playfair Display',serif;font-size:44px;font-weight:900;color:rgba(184,104,42,.18);line-height:1;margin-bottom:12px}
+.prt{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;margin-bottom:9px}
+.prd{font-size:12px;color:var(--mut);line-height:1.7}
+
+/* TESTIMONIALS */
+.testi{background:var(--car);padding:110px 60px}
+.testi .sl{color:var(--esp)}
+.testi .sl::before{background:var(--esp)}
+.testi .st2{color:var(--esp)}
+.tg{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;margin-top:56px}
+.tc{background:rgba(12,6,0,.13);padding:40px}
+.tstr{font-size:13px;color:var(--esp);margin-bottom:20px;letter-spacing:2px}
+.tq{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:20px;line-height:1.65;color:var(--esp);margin-bottom:28px}
+.ta{display:flex;align-items:center;gap:13px}
+.tav{width:46px;height:46px;border-radius:50%;overflow:hidden}
+.tav img{width:100%;height:100%;object-fit:cover;display:block}
+.tnm{font-size:13px;font-weight:700;color:var(--esp)}
+.trl{font-size:11px;color:rgba(12,6,0,.55);margin-top:2px}
+
+/* NEWSLETTER */
+.nl2{padding:130px 60px;text-align:center;position:relative;overflow:hidden}
+.nl2::before{content:'BRÛLÉ';position:absolute;font-family:'Playfair Display',serif;font-size:320px;font-weight:900;color:rgba(184,104,42,.04);top:50%;left:50%;transform:translate(-50%,-50%);white-space:nowrap;pointer-events:none}
+.nlt{font-family:'Playfair Display',serif;font-size:clamp(34px,5vw,64px);font-weight:700;margin-bottom:16px}
+.nlt em{font-style:italic;color:var(--gld)}
+.nlp{color:var(--mut);font-size:15px;margin-bottom:48px;font-weight:300}
+.nlf{display:flex;max-width:460px;margin:0 auto}
+.nli{flex:1;background:rgba(245,239,224,.06);border:1px solid rgba(245,239,224,.13);border-right:none;color:var(--cr);padding:16px 20px;font-family:'DM Sans';font-size:14px;outline:none}
+.nli::placeholder{color:var(--mut)}
+.nli:focus{border-color:var(--car)}
+.nlb{background:var(--car);color:var(--cr);border:none;padding:16px 28px;cursor:none;font-family:'DM Sans';font-size:10px;letter-spacing:2.5px;text-transform:uppercase;font-weight:700;transition:background .3s}
+.nlb:hover{background:var(--gld)}
+
+/* FOOTER */
+footer{background:var(--dk2);padding:80px 60px 40px;border-top:1px solid rgba(184,104,42,.15)}
+.fg{display:grid;grid-template-columns:1.8fr 1fr 1fr 1fr;gap:56px;margin-bottom:64px}
+.fa .logo{display:block;margin-bottom:20px}
+.fa p{font-size:13px;color:var(--mut);line-height:1.85;max-width:220px}
+.fc h5{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--gld);margin-bottom:24px}
+.fc ul{list-style:none;display:flex;flex-direction:column;gap:12px}
+.fc ul a{font-size:13px;color:var(--mut);text-decoration:none;transition:color .25s}
+.fc ul a:hover{color:var(--cr)}
+.fb{border-top:1px solid rgba(245,239,224,.07);padding-top:30px;display:flex;justify-content:space-between;align-items:center}
+.cp{font-size:12px;color:rgba(122,106,90,.65)}
+.socs{display:flex;gap:10px}
+.soc{width:36px;height:36px;border:1px solid rgba(245,239,224,.1);display:flex;align-items:center;justify-content:center;color:var(--mut);text-decoration:none;font-size:13px;transition:all .3s}
+.soc:hover{border-color:var(--car);color:var(--gld)}
+
+/* CART */
+.cd{position:fixed;right:-480px;top:0;width:480px;height:100vh;background:var(--dk2);z-index:2000;transition:right .45s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;border-left:1px solid rgba(184,104,42,.18)}
+.cd.op{right:0}
+.vl{position:fixed;inset:0;background:rgba(12,6,0,.78);z-index:1999;opacity:0;pointer-events:none;transition:opacity .4s}
+.vl.op{opacity:1;pointer-events:all}
+.dh{padding:30px 34px;border-bottom:1px solid rgba(184,104,42,.15);display:flex;justify-content:space-between;align-items:center}
+.dtt2{font-family:'Playfair Display',serif;font-size:24px;font-weight:700}
+.dcl{background:none;border:none;color:rgba(245,239,224,.5);font-size:22px;cursor:none;transition:color .2s}
+.dcl:hover{color:var(--cr)}
+.di{flex:1;overflow-y:auto;padding:24px 34px}
+.dit{display:flex;gap:14px;padding:16px 0;border-bottom:1px solid rgba(245,239,224,.06)}
+.dim{width:72px;height:72px;overflow:hidden;flex-shrink:0}
+.dim img{width:100%;height:100%;object-fit:cover;display:block}
+.dii{flex:1}
+.din{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;margin-bottom:4px}
+.dip{color:var(--gld);font-size:14px;font-weight:600}
+.diq{display:flex;align-items:center;gap:10px;margin-top:9px}
+.qb{width:26px;height:26px;background:rgba(245,239,224,.07);border:none;color:var(--cr);cursor:none;font-size:15px;display:flex;align-items:center;justify-content:center;transition:background .2s}
+.qb:hover{background:var(--car)}
+.qn{font-size:14px;font-weight:600;min-width:20px;text-align:center}
+.drm{background:none;border:none;color:rgba(245,239,224,.28);cursor:none;font-size:18px;align-self:flex-start;transition:color .2s}
+.drm:hover{color:#E05A5A}
+.ces{text-align:center;padding:70px 20px}
+.ces-ico{font-size:64px;display:block;margin-bottom:16px;opacity:.45}
+.ces p{font-family:'Playfair Display',serif;font-size:18px;color:var(--mut)}
+.df{padding:24px 34px;border-top:1px solid rgba(184,104,42,.15)}
+.dtot-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:22px}
+.dtot-row span{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--mut)}
+.dtot-row strong{font-family:'Playfair Display',serif;font-size:28px;color:var(--gld)}
+.ckb{width:100%;background:var(--car);color:var(--cr);border:none;padding:19px;cursor:none;font-family:'DM Sans';font-size:11px;letter-spacing:3px;text-transform:uppercase;font-weight:700;transition:background .3s}
+.ckb:hover{background:var(--gld)}
+
+/* TOAST */
+.toast{position:fixed;bottom:40px;left:50%;transform:translateX(-50%) translateY(70px);background:var(--car);color:var(--esp);padding:13px 28px;font-size:12px;letter-spacing:1px;font-weight:700;z-index:3000;white-space:nowrap;transition:transform .4s cubic-bezier(.4,0,.2,1);pointer-events:none}
+.toast.sh{transform:translateX(-50%) translateY(0)}
+
+/* PLACEHOLDER shimmer for images loading */
+.img-ph{background:linear-gradient(90deg,#1C0D04 25%,#2A1508 50%,#1C0D04 75%);background-size:200% 100%;animation:shimmer 1.8s infinite}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+@keyframes fu{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fi{from{opacity:0}to{opacity:1}}
+.rv{opacity:0;transform:translateY(26px);transition:opacity .85s ease,transform .85s ease}
+.rv.vs{opacity:1;transform:translateY(0)}
+
+@media(max-width:1024px){
+  nav,nav.sc{padding:18px 24px}
+  .navl{display:none}
+  .hero{grid-template-columns:1fr}
+  .hero-r{display:none}
+  .hero-l{padding:100px 24px 60px}
+  .sec,.cat-sec,.ori,.proc,.nl2,.testi{padding:80px 24px}
+  footer{padding:64px 24px 32px}
+  .ag{grid-template-columns:1fr}
+  .asm{display:none}
+  .abox{right:-14px;bottom:-18px}
+  .cg{grid-template-columns:1fr 1fr;grid-template-rows:auto}
+  .cc:nth-child(1){grid-row:auto}
+  .og,.tg,.prg{grid-template-columns:1fr}
+  .fg{grid-template-columns:1fr 1fr}
+  .cd{width:100%;right:-100%}
+  .ban-cnt{padding:0 40px}
+}
+</style>
+</head>
+<body>
+
+<div id="c1"></div><div id="c2"></div>
+<div class="vl" id="vl" onclick="closeCrt()"></div>
+
+<!-- CART -->
+<div class="cd" id="cd">
+  <div class="dh">
+    <h2 class="dtt2">Your Order</h2>
+    <button class="dcl" onclick="closeCrt()">✕</button>
+  </div>
+  <div class="di" id="di">
+    <div class="ces"><span class="ces-ico">☕</span><p>Your cup is empty.<br><small style="font-family:'DM Sans';font-size:13px;font-style:normal">Add something wonderful.</small></p></div>
+  </div>
+  <div class="df" id="df" style="display:none">
+    <div class="dtot-row"><span>Order Total</span><strong id="dtot">$0.00</strong></div>
+    <button class="ckb" onclick="checkout()">Proceed to Checkout</button>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="logo">BRÛL<b>É</b></a>
+  <ul class="navl">
+    <li><a href="#menu">Menu</a></li>
+    <li><a href="#shop">Shop</a></li>
+    <li><a href="#origins">Origins</a></li>
+    <li><a href="#about">Story</a></li>
+  </ul>
+  <button class="bag-btn" onclick="openCrt()">Bag <div class="bubble" id="bub">0</div></button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-l">
+    <div class="hc">
+      <p class="ey"><span class="ey-ln"></span>Artisan Coffee House · Est. 2009</p>
+      <h1 class="main">Where<br>Coffee<br><em>Becomes</em><br>Art</h1>
+      <p class="hero-sub">Single-origin beans from the world's finest micro-farms. Roasted in small batches. Served with soul.</p>
+      <div class="hbtns">
+        <button class="bf" onclick="gs('#menu')">Explore Menu</button>
+        <button class="bo" onclick="gs('#about')">Our Story</button>
+      </div>
+    </div>
+  </div>
+  <div class="hero-r">
+    <div class="hero-img img-ph" id="hero-img"></div>
+  </div>
+  <div class="scroll-hint"><div class="scl"></div><span>Scroll</span></div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="tt">
+    <span>Espresso</span><span class="dot">◆</span><span>Cold Brew</span><span class="dot">◆</span><span>Pour Over</span><span class="dot">◆</span><span>Matcha Latte</span><span class="dot">◆</span><span>Cortado</span><span class="dot">◆</span><span>Flat White</span><span class="dot">◆</span><span>Nitro Brew</span><span class="dot">◆</span><span>Croissants</span><span class="dot">◆</span><span>Single Origin</span><span class="dot">◆</span>
+    <span>Espresso</span><span class="dot">◆</span><span>Cold Brew</span><span class="dot">◆</span><span>Pour Over</span><span class="dot">◆</span><span>Matcha Latte</span><span class="dot">◆</span><span>Cortado</span><span class="dot">◆</span><span>Flat White</span><span class="dot">◆</span><span>Nitro Brew</span><span class="dot">◆</span><span>Croissants</span><span class="dot">◆</span><span>Single Origin</span><span class="dot">◆</span>
+  </div>
+</div>
+
+<!-- MENU -->
+<section class="sec" id="menu">
+  <div class="row-top rv">
+    <div><p class="sl">Signature Drinks</p><h2 class="st2">Our Finest<br><em>Creations</em></h2></div>
+    <a href="#" class="va">View Full Menu</a>
+  </div>
+  <div class="frow rv">
+    <button class="ft on" onclick="flt('all',this)">All</button>
+    <button class="ft" onclick="flt('hot',this)">Hot Coffee</button>
+    <button class="ft" onclick="flt('cold',this)">Cold Drinks</button>
+    <button class="ft" onclick="flt('food',this)">Food</button>
+    <button class="ft" onclick="flt('beans',this)">Beans & Gear</button>
+  </div>
+  <div class="pg" id="pg"></div>
+</section>
+
+<!-- BANNER -->
+<div class="banner">
+  <div class="ban-bg img-ph" id="ban-img"></div>
+  <div class="ban-cnt">
+    <p class="sl" style="margin-bottom:18px">Limited Edition</p>
+    <h2 class="st2">The Winter<br><em>Reserve</em> Drop</h2>
+    <p>A rare natural-processed Ethiopia Guji. Notes of blueberry, dark chocolate, and jasmine. Available while stocks last.</p>
+    <button class="bf">Shop the Drop</button>
+  </div>
+</div>
+
+<!-- CATEGORIES -->
+<section class="cat-sec" id="shop">
+  <div class="row-top rv"><div><p class="sl">Browse</p><h2 class="st2">Shop by<br><em>Category</em></h2></div></div>
+  <div class="cg rv">
+    <div class="cc"><div class="cc-img img-ph" id="cat1"></div><div class="cc-grad"></div><div class="cc-inf"><div class="cc-nm">Hot Beverages</div><div class="cc-ct">12 Items</div></div></div>
+    <div class="cc"><div class="cc-img img-ph" id="cat2"></div><div class="cc-grad"></div><div class="cc-inf"><div class="cc-nm">Cold Drinks</div><div class="cc-ct">8 Items</div></div></div>
+    <div class="cc"><div class="cc-img img-ph" id="cat3"></div><div class="cc-grad"></div><div class="cc-inf"><div class="cc-nm">Pastries</div><div class="cc-ct">15 Items</div></div></div>
+    <div class="cc"><div class="cc-img img-ph" id="cat4"></div><div class="cc-grad"></div><div class="cc-inf"><div class="cc-nm">Coffee Beans</div><div class="cc-ct">6 Items</div></div></div>
+    <div class="cc"><div class="cc-img img-ph" id="cat5"></div><div class="cc-grad"></div><div class="cc-inf"><div class="cc-nm">Gift Sets</div><div class="cc-ct">4 Items</div></div></div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="sec" id="about">
+  <div class="ag">
+    <div class="av rv">
+      <div class="asm"><img id="about2" class="img-ph" src="" alt="Barista"></div>
+      <div class="am"><img id="about1" class="img-ph" src="" alt="Coffee Art" style="width:100%;height:100%;object-fit:cover"></div>
+      <div class="abox"><div class="an">15</div><div class="al">Years</div></div>
+    </div>
+    <div class="rv" style="padding-top:8px">
+      <p class="sl">Our Story</p>
+      <h2 class="st2">Coffee is Art.<br><em>We Are Artists.</em></h2>
+      <blockquote class="bq">"We don't just serve coffee — we craft moments worth remembering."</blockquote>
+      <p class="ap">Since 2009, BRÛLÉ has been on a relentless pursuit of the perfect cup. We travel to origin, build lasting relationships with farmers, and obsess over every variable from soil to serve.</p>
+      <p class="ap">Our roasters are artisans. Our baristas are storytellers. Every drink carries the weight of that dedication.</p>
+      <div class="sr">
+        <div><div class="sn">12</div><div class="sl2">Origins</div></div>
+        <div><div class="sn">50k+</div><div class="sl2">Customers</div></div>
+        <div><div class="sn">4.9★</div><div class="sl2">Rating</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ORIGINS -->
+<section class="ori" id="origins">
+  <div class="row-top rv"><div><p class="sl">Direct Trade</p><h2 class="st2">Where Our<br><em>Beans Come From</em></h2></div></div>
+  <div class="og rv">
+    <div class="oc"><div class="oi"><img id="ori1" class="img-ph" src="" alt="Ethiopia" style="width:100%;height:100%;object-fit:cover;display:block"></div><div class="oov"></div><div class="oinf"><div class="ofl">🇪🇹</div><div class="ocn">Ethiopia</div><div class="onts">Blueberry · Jasmine · Bergamot</div><p class="op">Our Yirgacheffe lots washed and sun-dried on raised beds at 1,900m elevation.</p></div></div>
+    <div class="oc"><div class="oi"><img id="ori2" class="img-ph" src="" alt="Colombia" style="width:100%;height:100%;object-fit:cover;display:block"></div><div class="oov"></div><div class="oinf"><div class="ofl">🇨🇴</div><div class="ocn">Colombia</div><div class="onts">Caramel · Red Apple · Brown Sugar</div><p class="op">Huila department, 1,700m. Small family farms producing balanced, sweet cups.</p></div></div>
+    <div class="oc"><div class="oi"><img id="ori3" class="img-ph" src="" alt="Guatemala" style="width:100%;height:100%;object-fit:cover;display:block"></div><div class="oov"></div><div class="oinf"><div class="ofl">🇬🇹</div><div class="ocn">Guatemala</div><div class="onts">Dark Chocolate · Walnut · Toffee</div><p class="op">Antigua valley, volcanic-rich soil. Full-bodied and complex — perfect espresso.</p></div></div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="proc">
+  <div class="row-top rv"><div><p class="sl">The Craft</p><h2 class="st2">From Farm<br><em>to Your Cup</em></h2></div></div>
+  <div class="prg rv">
+    <div class="prc"><div class="pri"><img id="proc1" class="img-ph" src="" alt="Sourcing" style="width:100%;height:100%;object-fit:cover;display:block"></div><div class="prb"><div class="prn">01</div><div class="prt">Direct Sourcing</div><p class="prd">We visit farms personally and pay above fair-trade prices, building decade-long relationships.</p></div></div>
+    <div class="prc"><div class="pri"><img id="proc2" class="img-ph" src="" alt="Roasting" style="width:100%;height:100%;object-fit:cover;display:block"></div><div class="prb"><div class="prn">02</div><div class="prt">Artisan Roasting</div><p class="prd">Small-batch on a vintage Probat drum. Every profile tasted dozens of times before release.</p></div></div>
+    <div class="prc"><div class="pri"><img id="proc3" class="img-ph" src="" alt="Brewing" style="width:100%;height:100%;object-fit:cover;display:block"></div><div class="prb"><div class="prn">03</div><div class="prt">Precision Brewing</div><p class="prd">Temperature, grind, extraction — every variable dialed to extract maximum flavour.</p></div></div>
+    <div class="prc"><div class="pri"><img id="proc4" class="img-ph" src="" alt="Serving" style="width:100%;height:100%;object-fit:cover;display:block"></div><div class="prb"><div class="prn">04</div><div class="prt">Served with Soul</div><p class="prd">200+ hours of barista training. Latte art, warmth, and intention in every cup.</p></div></div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testi">
+  <div class="row-top rv"><div><p class="sl">Reviews</p><h2 class="st2">What Guests<br><em>Are Saying</em></h2></div></div>
+  <div class="tg rv">
+    <div class="tc"><div class="tstr">★★★★★</div><p class="tq">"The Ethiopian pour-over changed my entire understanding of coffee. Florals, bright acidity — I had no idea a cup could taste like this."</p><div class="ta"><div class="tav"><img id="av1" src="" alt="" class="img-ph"></div><div><div class="tnm">Anika Sharma</div><div class="trl">Coffee Enthusiast</div></div></div></div>
+    <div class="tc"><div class="tstr">★★★★★</div><p class="tq">"I've visited coffee shops in Tokyo, Melbourne, and New York. BRÛLÉ stands with the best. The craft, the space, the warmth."</p><div class="ta"><div class="tav"><img id="av2" src="" alt="" class="img-ph"></div><div><div class="tnm">Marcus Deleon</div><div class="trl">Travel Writer</div></div></div></div>
+    <div class="tc"><div class="tstr">★★★★★</div><p class="tq">"Their cold brew subscription has ruined all other coffee for me. Perfectly extracted, delivered weekly. Entirely spoiled."</p><div class="ta"><div class="tav"><img id="av3" src="" alt="" class="img-ph"></div><div><div class="tnm">Priya Nair</div><div class="trl">Product Designer</div></div></div></div>
+  </div>
+</section>
+
+<!-- NEWSLETTER -->
+<section class="nl2" id="newsletter">
+  <p class="sl" style="justify-content:center;margin-bottom:14px">Join the Club</p>
+  <h2 class="nlt">First Access to<br><em>New Roasts</em></h2>
+  <p class="nlp">Exclusive drops, brewing guides, and behind-the-scenes stories. No spam — promise.</p>
+  <div class="nlf">
+    <input type="email" class="nli" placeholder="your@email.com" id="nle">
+    <button class="nlb" onclick="sub()">Subscribe</button>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="fg">
+    <div class="fa"><a href="#" class="logo">BRÛL<b>É</b></a><p>Artisan coffee crafted with intention. Sourced responsibly. Roasted with love. Served with soul.</p></div>
+    <div class="fc"><h5>Menu</h5><ul><li><a href="#">Hot Coffee</a></li><li><a href="#">Cold Drinks</a></li><li><a href="#">Pastries</a></li><li><a href="#">Seasonal Specials</a></li></ul></div>
+    <div class="fc"><h5>Shop</h5><ul><li><a href="#">Coffee Beans</a></li><li><a href="#">Brewing Gear</a></li><li><a href="#">Subscriptions</a></li><li><a href="#">Gift Cards</a></li></ul></div>
+    <div class="fc"><h5>Visit</h5><ul><li><a href="#">Find a Location</a></li><li><a href="#">Mon–Fri: 7am–8pm</a></li><li><a href="#">Sat–Sun: 8am–9pm</a></li><li><a href="#">hello@brule.coffee</a></li></ul></div>
+  </div>
+  <div class="fb"><p class="cp">© 2025 BRÛLÉ Coffee House. All rights reserved.</p><div class="socs"><a href="#" class="soc">𝕏</a><a href="#" class="soc">in</a><a href="#" class="soc">◎</a></div></div>
+</footer>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ── IMAGE MAP: Unsplash URLs loaded by browser ── */
+const IMGS = {
+  hero:   'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=1200&q=85&fit=crop',
+  banner: 'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=1600&q=85&fit=crop',
+  cat1:   'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=900&q=80&fit=crop',
+  cat2:   'https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=700&q=80&fit=crop',
+  cat3:   'https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=700&q=80&fit=crop',
+  cat4:   'https://images.unsplash.com/photo-1559056199-641a0ac8b55e?w=700&q=80&fit=crop',
+  cat5:   'https://images.unsplash.com/photo-1497935586351-b67a49e012bf?w=700&q=80&fit=crop',
+  about1: 'https://images.unsplash.com/photo-1453614512568-c4024d13c247?w=900&q=85&fit=crop',
+  about2: 'https://images.unsplash.com/photo-1442512595331-e89e73853f31?w=400&q=80&fit=crop',
+  ori1:   'https://images.unsplash.com/photo-1580933073521-dc49ac0d4e6a?w=700&q=80&fit=crop',
+  ori2:   'https://images.unsplash.com/photo-1541167760496-1628856ab772?w=700&q=80&fit=crop',
+  ori3:   'https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=700&q=80&fit=crop',
+  proc1:  'https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=500&q=80&fit=crop',
+  proc2:  'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=500&q=80&fit=crop',
+  proc3:  'https://images.unsplash.com/photo-1442512595331-e89e73853f31?w=500&q=80&fit=crop',
+  proc4:  'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=500&q=80&fit=crop',
+  av1:    'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&q=80&fit=crop&crop=face',
+  av2:    'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80&fit=crop&crop=face',
+  av3:    'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=80&fit=crop&crop=face',
+};
+
+/* Apply background images to divs, src to img tags */
+function loadBgImg(id, url) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const img = new Image();
+  img.onload = () => {
+    el.style.backgroundImage = `url('${url}')`;
+    el.classList.remove('img-ph');
+  };
+  img.src = url;
+}
+function loadSrcImg(id, url) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.onload = () => el.classList.remove('img-ph');
+  el.src = url;
+}
+
+// Load all static images
+loadBgImg('hero-img', IMGS.hero);
+loadBgImg('ban-img',  IMGS.banner);
+['cat1','cat2','cat3','cat4','cat5'].forEach(id => loadBgImg(id, IMGS[id]));
+['about1','about2','ori1','ori2','ori3','proc1','proc2','proc3','proc4','av1','av2','av3']
+  .forEach(id => loadSrcImg(id, IMGS[id]));
+
+/* ── PRODUCTS ── */
+const products = [
+  {id:1,  n:'Signature Espresso',      d:'Double shot, rich crema, bittersweet dark chocolate finish',       p:4.50,        cat:'hot',   badge:'Bestseller', img:'https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?w=600&q=80&fit=crop'},
+  {id:2,  n:'Caramel Cloud Latte',     d:'Espresso, silky oat milk, house-made salted caramel drizzle',       p:6.50,op:7.50,cat:'hot',   badge:'New',        img:'https://images.unsplash.com/photo-1541167760496-1628856ab772?w=600&q=80&fit=crop'},
+  {id:3,  n:'Ethiopian Pour Over',     d:'Single origin, bright florals, stone fruit, citrus zest',           p:7.00,        cat:'hot',   badge:'',           img:'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&q=80&fit=crop'},
+  {id:4,  n:'Nitro Cold Brew',         d:'Nitrogen-infused, cascading pour, naturally sweet & silky',         p:6.00,        cat:'cold',  badge:'Popular',    img:'https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=600&q=80&fit=crop'},
+  {id:5,  n:'Matcha Oat Latte',        d:'Ceremonial-grade matcha, steamed oat milk, no sugar needed',        p:6.50,        cat:'cold',  badge:'',           img:'https://images.unsplash.com/photo-1515823662972-da6a2e4d3002?w=600&q=80&fit=crop'},
+  {id:6,  n:'Hazelnut Frappé',         d:'Blended cold brew, house hazelnut syrup, whipped cream',            p:7.50,op:8.50,cat:'cold',  badge:'Sale',       img:'https://images.unsplash.com/photo-1572442388796-11668a67e53d?w=600&q=80&fit=crop'},
+  {id:7,  n:'Almond Croissant',        d:'Buttery, flaky, filled with almond frangipane — twice-baked',       p:4.50,        cat:'food',  badge:'',           img:'https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=600&q=80&fit=crop'},
+  {id:8,  n:'Dark Chocolate Tart',     d:'Rich ganache, salted caramel layer, cocoa sablé pastry crust',      p:5.50,        cat:'food',  badge:"Chef's Pick",img:'https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=600&q=80&fit=crop'},
+  {id:9,  n:'Ethiopia Yirgacheffe',    d:'250g whole beans — blueberry, jasmine, bright lemon zest',          p:18.00,       cat:'beans', badge:'',           img:'https://images.unsplash.com/photo-1559056199-641a0ac8b55e?w=600&q=80&fit=crop'},
+  {id:10, n:'Colombia Huila Blend',    d:'250g whole beans — caramel, red apple, clean & balanced',           p:16.00,       cat:'beans', badge:'',           img:'https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=600&q=80&fit=crop'},
+  {id:11, n:'Cortado',                 d:'Equal parts espresso and lightly textured warm steamed milk',        p:4.00,        cat:'hot',   badge:'',          img:'scott-elkins-DhWOFrDtY60-unsplash.jpg'},
+  {id:12, n:'Cold Brew Concentrate',   d:'12-hour slow-brewed, bold & smooth — perfect over ice',             p:8.00,        cat:'cold',  badge:'',           img:'https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=600&q=80&fit=crop'},
+];
+
+let cart = [];
+
+function renderP(cat='all') {
+  const data = cat==='all' ? products : products.filter(x=>x.cat===cat);
+  document.getElementById('pg').innerHTML = data.map(p=>`
+    <div class="pc">
+      <div class="pi">
+        <img src="${p.img}" alt="${p.n}" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block">
+        ${p.badge?`<div class="pbadge">${p.badge}</div>`:''}
+        <div class="pov"><button class="pq" onclick="addC(${p.id})">Add to Order</button></div>
+      </div>
+      <div class="pb">
+        <div class="pn">${p.n}</div>
+        <p class="pd">${p.d}</p>
+        <div class="pf">
+          <div class="ppr">${p.op?`<s>$${p.op.toFixed(2)}</s> `:''} $${p.p.toFixed(2)}</div>
+          <button class="padd" onclick="addC(${p.id})">+</button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function flt(cat,btn){
+  document.querySelectorAll('.ft').forEach(t=>t.classList.remove('on'));
+  btn.classList.add('on'); renderP(cat);
+}
+
+function addC(id) {
+  const p=products.find(x=>x.id===id);
+  const ex=cart.find(x=>x.id===id);
+  ex ? ex.qty++ : cart.push({...p, qty:1});
+  updCart(); toast(p.n+' added to bag ✓');
+}
+function remC(id){cart=cart.filter(x=>x.id!==id);updCart();}
+function chQ(id,d){
+  const it=cart.find(x=>x.id===id);
+  if(!it)return; it.qty+=d;
+  if(it.qty<=0){remC(id);return;} updCart();
+}
+
+function updCart() {
+  const cnt=cart.reduce((a,i)=>a+i.qty,0);
+  document.getElementById('bub').textContent=cnt;
+  const tot=cart.reduce((a,i)=>a+i.p*i.qty,0);
+  document.getElementById('dtot').textContent='$'+tot.toFixed(2);
+  const di=document.getElementById('di'), df=document.getElementById('df');
+  if(!cart.length){
+    di.innerHTML='<div class="ces"><span class="ces-ico">☕</span><p>Your cup is empty.<br><small style="font-family:\'DM Sans\';font-size:13px;font-style:normal">Add something wonderful.</small></p></div>';
+    df.style.display='none';
+  } else {
+    di.innerHTML=cart.map(i=>`
+      <div class="dit">
+        <div class="dim"><img src="${i.img}" alt="${i.n}" style="width:100%;height:100%;object-fit:cover;display:block"></div>
+        <div class="dii">
+          <div class="din">${i.n}</div>
+          <div class="dip">$${(i.p*i.qty).toFixed(2)}</div>
+          <div class="diq">
+            <button class="qb" onclick="chQ(${i.id},-1)">−</button>
+            <span class="qn">${i.qty}</span>
+            <button class="qb" onclick="chQ(${i.id},1)">+</button>
+          </div>
+        </div>
+        <button class="drm" onclick="remC(${i.id})">×</button>
+      </div>`).join('');
+    df.style.display='block';
+  }
+}
+
+function openCrt(){document.getElementById('cd').classList.add('op');document.getElementById('vl').classList.add('op');}
+function closeCrt(){document.getElementById('cd').classList.remove('op');document.getElementById('vl').classList.remove('op');}
+function checkout(){toast('🎉 Order placed! Thank you for choosing BRÛLÉ.');cart=[];updCart();closeCrt();}
+function sub(){
+  const v=document.getElementById('nle').value;
+  if(!v||!v.includes('@')){toast('Please enter a valid email');return;}
+  document.getElementById('nle').value=''; toast('Welcome to the BRÛLÉ club! ☕');
+}
+function gs(sel){document.querySelector(sel)?.scrollIntoView({behavior:'smooth'});}
+
+let tT;
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('sh');
+  clearTimeout(tT); tT=setTimeout(()=>t.classList.remove('sh'),2800);
+}
+
+window.addEventListener('scroll',()=>{
+  document.getElementById('nav').classList.toggle('sc',scrollY>60);
+  document.querySelectorAll('.rv').forEach(el=>{
+    if(el.getBoundingClientRect().top<innerHeight-80) el.classList.add('vs');
+  });
+});
+setTimeout(()=>document.querySelectorAll('.rv').forEach(el=>{if(el.getBoundingClientRect().top<innerHeight-80)el.classList.add('vs');}),100);
+
+/* Cursor */
+const c1=document.getElementById('c1'), c2=document.getElementById('c2');
+let mx=0,my=0,fx=0,fy=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;c1.style.left=mx+'px';c1.style.top=my+'px';});
+(function loop(){fx+=(mx-fx)*.12;fy+=(my-fy)*.12;c2.style.left=fx+'px';c2.style.top=fy+'px';requestAnimationFrame(loop);})();
+document.querySelectorAll('button,a').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{c1.style.transform='translate(-50%,-50%) scale(2.2)';c2.style.transform='translate(-50%,-50%) scale(1.6)';});
+  el.addEventListener('mouseleave',()=>{c1.style.transform='translate(-50%,-50%) scale(1)';c2.style.transform='translate(-50%,-50%) scale(1)';});
+});
+
+renderP();
+</script>
+</body>
+</html>
